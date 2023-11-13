@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bitedu.bipa.simplesignalarm.mapper.CommonMapper">
+
+    <!--해당 사용자의 현재 직책, 직급 검색-->
+    <select id="getPositionAndGrade" resultType="PositionAndGradeDTO" parameterType="int">
+        select grade_name, position_name, dept_id
+        from grade t1
+            inner join
+            organization_user t2 on t1.grade_code = t2.grade_code
+            inner join
+            position t3 on t2.position_code = t3.position_code
+        where org_user_id = #{userId};
+    </select>
+
+
+</mapper>

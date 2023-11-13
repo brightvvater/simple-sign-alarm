@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bitedu.bipa.simplesignalarm.mapper.AuthorityMapper">
+
+    <select id="findAuthority" resultType="int">
+        select count(*) from user_role
+        where org_user_id = #{orgUserId} and authority_code = #{authorityCode};
+    </select>
+
+    <select id="getAuthorityName" resultType="String" parameterType="int">
+        select authority_name from authority
+        where authority_code = #{authorityCode}
+    </select>
+
+</mapper>
