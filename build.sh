@@ -4,7 +4,7 @@ BUILD_COMMAND="build"
 
 echo "설정파일을 가져옵니다..."
 cp ~/application.properties2 ./src/main/resources
-mv ./src/main/resources/application.properties2 ./src/main/resources/application.properties2
+mv ./src/main/resources/application.properties2 ./src/main/resources/application.properties
 
 echo "Gradle 빌드를 시작합니다..."
 $GRADLE $BUILD_COMMAND
