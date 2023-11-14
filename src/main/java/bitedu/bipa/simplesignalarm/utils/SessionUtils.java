@@ -13,19 +13,9 @@ public class SessionUtils {
         RequestContextHolder.getRequestAttributes().setAttribute(name, value, RequestAttributes.SCOPE_SESSION);
     }
 
-    public static void removeAttribute(String name){
-        RequestContextHolder.getRequestAttributes().removeAttribute(name,RequestAttributes.SCOPE_SESSION);
-    }
-
     public static Object getAttribute(String name){
         System.out.println("SessionUtils : " + RequestContextHolder.getRequestAttributes().getSessionId());
         return RequestContextHolder.getRequestAttributes().getAttribute(name,RequestAttributes.SCOPE_SESSION);
     }
 
-    public static Boolean hasIdAttribute(String key, int id){
-        int sessionValue = Integer.parseInt(RequestContextHolder.getRequestAttributes().getAttribute(key, RequestAttributes.SCOPE_SESSION).toString());
-        Boolean result = sessionValue == id;
-        System.out.println("sessionValue: " + sessionValue + " value: " + id + " result: " + result);
-        return result;
-    }
 }
