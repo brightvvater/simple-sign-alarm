@@ -76,9 +76,10 @@ public class AlarmService {
 
     // 전체 알림을 들고오는 부분
     public List<AlarmDTO> selectAlarm(int orgUserId) {
+        System.out.println("userId: " + orgUserId);
 
         List<AlarmDTO> alarmDTOList = alarmDAO.selectAlarm(orgUserId);
-
+        System.out.println("dtoList " + alarmDTOList);
         for(AlarmDTO alarmDTO : alarmDTOList) {
             int alarmId = alarmDTO.getAlarmId();
 
