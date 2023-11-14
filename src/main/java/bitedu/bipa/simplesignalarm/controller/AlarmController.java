@@ -5,12 +5,12 @@ import bitedu.bipa.simplesignalarm.model.dto.AlarmResDTO;
 import bitedu.bipa.simplesignalarm.service.AlarmService;
 import bitedu.bipa.simplesignalarm.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/alarm")
 public class AlarmController {
 
     @Autowired
@@ -21,20 +21,20 @@ public class AlarmController {
         alarmService.createNewAlarm(alarmResDTO.getApprovalDocId(), alarmResDTO.getReceiverId(), alarmResDTO.getAlarmCode());
     }
 
-    @GetMapping("/alarm")
+    @GetMapping("/")
     public List<AlarmDTO> getAlarm(){
         int orgUserId = (int) SessionUtils.getAttribute("orgUserId");
         List<AlarmDTO> alarmDTO = alarmService.selectAlarm(orgUserId);
         return alarmDTO;
     }
 
-    @GetMapping("/alarm/count")
+    @GetMapping("/count")
     public int alarmCount(){
         int orgUserId = (int) SessionUtils.getAttribute("orgUserId");
         return alarmService.alarmCount(orgUserId);
     }
 
-    @PutMapping("/alarm/update/{alarmId}")
+    @PutMapping("/update/{alarmId}")
     public boolean confirmationStatusUpdate(@PathVariable int alarmId) {
         return alarmService.updateConfirmationStatus(alarmId);
     }
