@@ -6,6 +6,7 @@ import bitedu.bipa.simplesignalarm.service.AlarmService;
 import bitedu.bipa.simplesignalarm.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class AlarmController {
 
     @GetMapping("/")
     public List<AlarmDTO> getAlarm(){
+        System.out.println("alarm controller : " + RequestContextHolder.getRequestAttributes().getSessionId());
         int orgUserId = (int) SessionUtils.getAttribute("orgUserId");
         List<AlarmDTO> alarmDTO = alarmService.selectAlarm(orgUserId);
         return alarmDTO;
