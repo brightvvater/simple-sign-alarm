@@ -11,7 +11,6 @@ public class AlarmDTO {
     private int approvalDocId;
     private String alarmContent;
     private String approvalDocTitle;
-    private int approvalCount;
     private String userName;
     private int orgUserId;
 }
