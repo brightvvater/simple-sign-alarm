@@ -50,11 +50,11 @@ public class AlarmController {
         @Autowired
         private RedisTemplate<String, Object> redisTemplate;
 
-        @GetMapping("/get-session/{sessionId}")
-        public Object getSession(@PathVariable String sessionId) {
-            String sessionKey = "spring:session:sessions:" + sessionId;
-            return redisTemplate.opsForValue().get(sessionKey);
-        }
+//        @GetMapping("/get-session/{sessionId}")
+//        public Object getSession(@PathVariable String sessionId) {
+//            String sessionKey = "spring:session:sessions:" + sessionId;
+//            return redisTemplate.opsForValue().get(sessionKey);
+//        }
 
 }
 
