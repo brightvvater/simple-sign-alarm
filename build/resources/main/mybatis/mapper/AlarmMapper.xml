@@ -34,14 +34,18 @@
         and h.alarm_code = #{alarmCode} and h.approval_doc_id = #{approvalDocId};
     </select>
 
-    <!-- 결재자 들고오기 -->
-    <select id="selectApprovalUserName" parameterType="int" resultType="UserApprovalDTO">
-        select u.user_name, d.approval_count from alarm_history h
-        join approval_doc d on d.approval_doc_id = h.approval_doc_id
-        join approval a on d.approval_doc_id = a.approval_doc_id
-        join organization_user o on o.org_user_id = a.org_user_id
-        join user u on o.user_id = u.user_id
-        where a.approval_order = 1 and h.alarm_id = #{alarmId};
+    <!-- 실시간 결재자 -->
+    <select id="selectApprovalUser" parameterType="int" resultType="String">
+        SELECT u.user_name FROM approval a
+        JOIN (
+        SELECT approval_doc_id, MAX(approval_order) AS max_approval_order
+        FROM approval
+        WHERE approval_status = 'A' AND approval_doc_id = #{approvalDocId}
+        GROUP BY approval_doc_id
+        ) AS max_a ON a.approval_doc_id = max_a.approval_doc_id AND a.approval_order = max_a.max_approval_order
+        JOIN organization_user o ON o.org_user_id = a.org_user_id
+        JOIN user u ON u.user_id = o.user_id
+        WHERE a.approval_status = 'A' AND a.approval_doc_id = #{approvalDocId};
     </select>
 
     <!-- 안 읽은 알림 갯수 구하기 -->
@@ -53,5 +57,18 @@
     <update id="updateConfirmationStatus" parameterType="int">
         update alarm_history set confirmation_status = 1 where alarm_id = #{alarmId};
     </update>
+
+    <!-- 알림 삭제 가능하게 만들기 -->
+    <select id="selectAlarmOn" parameterType="int">
+        select * from alarm_history where alarm_id = #{alarmId};
+    </select>
+    <insert id="insertAlarmDelete" parameterType="AlarmDeleteDTO">
+        insert into alarm_delete_history
+        (alarm_id, alarm_date, cocnfirmation_status, alarm_code, approval_doc_id, position_name, grade_name, alarm_content, org_user_id)
+        values(#{alarmId}, #{alarmDate}, #{cocnfirmationStatus}, #{alarmCode}, #{approvalDocId}, #{positionName}, #{gradeName},#{alarmContent}, #{orgUserId});
+    </insert>
+    <delete id="deleteAlarm" parameterType="int">
+        delete from alarm_history where alarm_id = #{alarmId};
+    </delete>
 
 </mapper>
