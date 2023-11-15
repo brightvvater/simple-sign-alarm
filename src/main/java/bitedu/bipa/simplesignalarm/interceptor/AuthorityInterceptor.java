@@ -2,6 +2,7 @@
 
     import bitedu.bipa.simplesignalarm.mapper.AuthorityMapper;
     import bitedu.bipa.simplesignalarm.model.dto.RoleRequestDTO;
+    import bitedu.bipa.simplesignalarm.service.RedisService;
     import bitedu.bipa.simplesignalarm.utils.SessionUtils;
     import bitedu.bipa.simplesignalarm.validation.CustomErrorCode;
     import bitedu.bipa.simplesignalarm.validation.RestApiException;
@@ -12,7 +13,10 @@
 
     import javax.servlet.http.HttpServletRequest;
     import javax.servlet.http.HttpServletResponse;
+    import javax.servlet.http.HttpSession;
+    import java.util.Arrays;
     import java.util.Collections;
+    import java.util.List;
     import java.util.stream.Collectors;
 
     @Component
@@ -25,14 +29,19 @@
             //int authorityCode = 1; //1은 master, 2는 부서관리자, 3은 일반사용자 필요에 따라 바꿔 사용하세요
 
             int authorityCode = (SessionUtils.getAttribute("authorityCode") != null) ? (int) SessionUtils.getAttribute("authorityCode") : 3;
-            String allHeaders = Collections.list(request.getHeaderNames())
+            List<String> cookieHeaderValues = Collections.list(request.getHeaders("Cookie"))
                     .stream()
-                    .map(headerName -> headerName + ": " + Collections.list(request.getHeaders(headerName)))
-                    .collect(Collectors.joining(", "));
-            System.out.println("url:" + request.getRequestURI() + "  authorityCode:" + authorityCode + " headers: " + allHeaders);
+                    .flatMap(cookieHeader -> Arrays.stream(cookieHeader.split(";")))
+                    .map(String::trim)
+                    .collect(Collectors.toList());
 
-            //int authorityCode = (SessionUtils.getAttribute("authorityCode") != null) ? (int) SessionUtils.getAttribute("authorityCode") : 3;
-            System.out.println("url:" + request.getRequestURI() + "  authorityCode:" + authorityCode);
+            //System.out.println(cookieHeaderValues.get(0) + cookieHeaderValues.get(1) + cookieHeaderValues.get(2));
+            String JSESSIONID = cookieHeaderValues.get(1).substring(cookieHeaderValues.get(1).indexOf("=") + 1);
+            //SessionUtils sessionUtils = new SessionUtils();
+            //System.out.println(sessionUtils.getSession(JSESSIONID));
+            //System.out.println("url:" + request.getRequestURI() + "  authorityCode:" + authorityCode + " headers: " + cookieHeaderValues);
+
+
             //handler 종류 확인 -> HandlerMethod 타입인지 체크
             if(handler instanceof HandlerMethod == false){
                 return true;
