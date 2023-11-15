@@ -40,4 +40,9 @@ public class AlarmController {
     public boolean confirmationStatusUpdate(@PathVariable int alarmId) {
         return alarmService.updateConfirmationStatus(alarmId);
     }
+
+    @DeleteMapping("/alarm/delete/{alarmId}")
+    public void deleteAlarm(@PathVariable int alarmId){
+        alarmService.deleteAlarm(alarmId);
+    }
 }

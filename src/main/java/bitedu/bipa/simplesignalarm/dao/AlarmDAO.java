@@ -2,6 +2,7 @@ package bitedu.bipa.simplesignalarm.dao;
 
 import bitedu.bipa.simplesignalarm.mapper.AlarmMapper;
 import bitedu.bipa.simplesignalarm.model.dto.AlarmDTO;
+import bitedu.bipa.simplesignalarm.model.dto.AlarmDeleteDTO;
 import bitedu.bipa.simplesignalarm.model.dto.AlarmReqDTO;
 import bitedu.bipa.simplesignalarm.model.dto.UserApprovalDTO;
 import org.springframework.stereotype.Repository;
@@ -34,9 +35,9 @@ public class AlarmDAO {
         return alarmMapper.selectApprovalDocTitle(alarmDate, orgUserId, alarmCode, approvalDocId);
     }
 
-    // 결재자 들고오기
-    public UserApprovalDTO selectApprovalUserName(int alarmId){
-        return alarmMapper.selectApprovalUserName(alarmId);
+    // 실시간 결재자 들고오기
+    public String selectApprovalUser(int approvalDocId){
+        return alarmMapper.selectApprovalUser(approvalDocId);
     }
 
     // 안읽은 알림 총 갯수
@@ -47,6 +48,17 @@ public class AlarmDAO {
     // 알림 읽음 처리
     public boolean updateConfirmationStatus(int alarmId){
         return alarmMapper.updateConfirmationStatus(alarmId);
+    }
+
+    // 알림 삭제하고 삽입
+    public AlarmDeleteDTO selectAlarmOn(int alarmId){
+        return alarmMapper.selectAlarmOn(alarmId);
+    }
+    public boolean insertAlarmDelete (AlarmDeleteDTO alarmDeleteDTO){
+        return alarmMapper.insertAlarmDelete(alarmDeleteDTO);
+    }
+    public void deleteAlarm(int alarmId) {
+        alarmMapper.deleteAlarm(alarmId);
     }
 
 }

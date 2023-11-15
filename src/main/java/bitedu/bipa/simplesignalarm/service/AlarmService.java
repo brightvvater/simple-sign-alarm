@@ -2,10 +2,7 @@ package bitedu.bipa.simplesignalarm.service;
 
 import bitedu.bipa.simplesignalarm.dao.AlarmDAO;
 import bitedu.bipa.simplesignalarm.dao.CommonDAO;
-import bitedu.bipa.simplesignalarm.model.dto.AlarmDTO;
-import bitedu.bipa.simplesignalarm.model.dto.AlarmReqDTO;
-import bitedu.bipa.simplesignalarm.model.dto.PositionAndGradeDTO;
-import bitedu.bipa.simplesignalarm.model.dto.UserApprovalDTO;
+import bitedu.bipa.simplesignalarm.model.dto.*;
 import bitedu.bipa.simplesignalarm.validation.CustomErrorCode;
 import bitedu.bipa.simplesignalarm.validation.RestApiException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -71,20 +68,27 @@ public class AlarmService {
         alarmDTO.setApprovalDocId(alarmReqDTO.getApprovalDocId());
         alarmDTO.setApprovalDocTitle(userApprovalDto.getApprovalDocTitle());
         alarmDTO.setAlarmId(userApprovalDto.getAlarmId());
+
+        // 실시간 결재자를 들고옴
+        String userName = alarmDAO.selectApprovalUser(alarmDTO.getApprovalDocId());
+        if(userName != null) {
+            alarmDTO.setUserName(userName);
+        }
+
         messagingTemplate.convertAndSend("/topic/alarm/" + alarmReqDTO.getOrgUserId(), alarmDTO);
     }
 
     // 전체 알림을 들고오는 부분
     public List<AlarmDTO> selectAlarm(int orgUserId) {
+
         List<AlarmDTO> alarmDTOList = alarmDAO.selectAlarm(orgUserId);
+
         for(AlarmDTO alarmDTO : alarmDTOList) {
-            int alarmId = alarmDTO.getAlarmId();
+            int approvalDocId = alarmDTO.getApprovalDocId();
+            String userName = alarmDAO.selectApprovalUser(approvalDocId);
 
-            UserApprovalDTO userApprovalDTO = alarmDAO.selectApprovalUserName(alarmId);
-
-            if(userApprovalDTO != null) {
-                alarmDTO.setApprovalCount(userApprovalDTO.getApprovalCount());
-                alarmDTO.setUserName(userApprovalDTO.getUserName());
+            if(userName != null) {
+                alarmDTO.setUserName(userName);
             }
         }
         return alarmDTOList;
@@ -98,6 +102,15 @@ public class AlarmService {
     // 알림의 읽음으로 변경
     public boolean updateConfirmationStatus(int alarmId){
         return alarmDAO.updateConfirmationStatus(alarmId);
+    }
+
+    // 알림 삭제 삽입
+    public void deleteAlarm(int alarmId){
+        AlarmDeleteDTO alarmDeleteDTO = alarmDAO.selectAlarmOn(alarmId);
+        boolean flag = alarmDAO.insertAlarmDelete(alarmDeleteDTO);
+        if(flag){
+            alarmDAO.deleteAlarm(alarmDeleteDTO.getAlarmId());
+        }
     }
 
 }
