@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 //@Configuration
 //@Log4j2
 //@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
-//public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //
 //    @Override
 //    protected void configure(HttpSecurity http) throws Exception {
@@ -16,4 +16,4 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 //        http.headers().frameOptions().sameOrigin();
 //
 //    }
-//}
+}
