@@ -71,14 +71,10 @@ public class AlarmController {
         return alarmService.updateConfirmationStatus(alarmId);
     }
 
-    @DeleteMapping("/alarm/delete/{alarmId}")
+    @DeleteMapping("/delete/{alarmId}")
     public void deleteAlarm(@PathVariable int alarmId){
         alarmService.deleteAlarm(alarmId);
     }
-
-
-
-
 
 }
 
