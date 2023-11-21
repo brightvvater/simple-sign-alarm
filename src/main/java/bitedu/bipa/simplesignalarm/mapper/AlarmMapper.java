@@ -48,5 +48,5 @@ public interface AlarmMapper {
     void deleteFailAlarm(int failId);
 
     // 실패 알림 전체 삭제
-    void deleteFailAlarmAll();
+    void deleteFailAlarmAll(int orgUserId);
 }

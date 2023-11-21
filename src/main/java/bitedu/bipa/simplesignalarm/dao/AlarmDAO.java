@@ -78,7 +78,7 @@ public class AlarmDAO {
     }
 
     // 실패 알림 전체 삭제
-    public void deleteFailAlarmAll(){
-        alarmMapper.deleteFailAlarmAll();
+    public void deleteFailAlarmAll(int orgUserId){
+        alarmMapper.deleteFailAlarmAll(orgUserId);
     }
 }

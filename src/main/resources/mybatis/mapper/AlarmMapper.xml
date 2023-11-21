@@ -97,6 +97,6 @@
 
     <!-- 실패 알림 전체 삭제 -->
     <delete id="deleteFailAlarmAll">
-        delete from alarm_fail;
+        delete from alarm_fail where org_user_id = #{orgUserId};
     </delete>
 </mapper>

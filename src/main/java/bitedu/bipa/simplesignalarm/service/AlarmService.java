@@ -132,7 +132,7 @@ public class AlarmService {
                 alarmDTO.setUserName(userName);
             }
             // 전체 알림을 들고 올 때는 이미 모든 알림을 들고오니 실패된 알림 테이블을 삭제한다.
-            alarmDAO.deleteFailAlarmAll();
+            alarmDAO.deleteFailAlarmAll(orgUserId);
         }
         return alarmDTOList;
     }
