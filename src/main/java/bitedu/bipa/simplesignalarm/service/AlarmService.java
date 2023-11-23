@@ -5,6 +5,8 @@ import bitedu.bipa.simplesignalarm.dao.CommonDAO;
 import bitedu.bipa.simplesignalarm.model.dto.*;
 import bitedu.bipa.simplesignalarm.validation.CustomErrorCode;
 import bitedu.bipa.simplesignalarm.validation.RestApiException;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,11 @@ public class AlarmService {
         this.messagingTemplate = messagingTemplate;
     }
 
+
+    @KafkaListener(topics = "alarmTopic", groupId = "group-id-alarm")
+    public void getAlarm(@Payload ApprovalEvent alarmResDTO) {
+      this.createNewAlarm(alarmResDTO.getApprovalDocId(), alarmResDTO.getReceiverId(),alarmResDTO.getAlarmCode());
+    }
     @Transactional
     public void createNewAlarm(int approvalDocId, int orgUserId, String alarmCode) {
         PositionAndGradeDTO positionAndGradeDTO = commonDAO.getPositionAndGrade(orgUserId);
