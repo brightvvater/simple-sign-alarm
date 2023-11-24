@@ -35,7 +35,7 @@ public class AlarmService {
     @KafkaListener(topics = "alarmTopic", groupId = "group-id-alarm")
     public void getAlarm(@Payload ApprovalEvent alarmResDTO) {
         System.out.println("alarmTopic 응답");
-      this.createNewAlarm(alarmResDTO.getApprovalDocId(), alarmResDTO.getReceiverId(),alarmResDTO.getAlarmCode());
+        this.createNewAlarm(alarmResDTO.getApprovalDocId(), alarmResDTO.getReceiverId(),alarmResDTO.getAlarmCode());
     }
     @Transactional
     public void createNewAlarm(int approvalDocId, int orgUserId, String alarmCode) {
