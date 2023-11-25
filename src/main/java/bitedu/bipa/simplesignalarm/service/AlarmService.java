@@ -35,16 +35,16 @@ public class AlarmService {
     @KafkaListener(topics = "alarmTopic", groupId = "group-id-alarm")
     public void getAlarm(@Payload ApprovalEvent alarmResDTO) {
         System.out.println("alarmTopic 응답");
-        this.createNewAlarm(alarmResDTO.getApprovalDocId(), alarmResDTO.getReceiverId(),alarmResDTO.getAlarmCode());
+        this.createNewAlarm(alarmResDTO.getApprovalDocId(), alarmResDTO.getReceiverId(),alarmResDTO.getAlarmCode(),alarmResDTO.getApproverId());
     }
     @Transactional
-    public void createNewAlarm(int approvalDocId, int orgUserId, String alarmCode) {
-        System.out.println("createAlarm");
+    public void createNewAlarm(int approvalDocId, int orgUserId, String alarmCode, int approverId) {
         PositionAndGradeDTO positionAndGradeDTO = commonDAO.getPositionAndGrade(orgUserId);
         AlarmReqDTO alarmReqDTO = new AlarmReqDTO();
         alarmReqDTO.setAlarmCode(alarmCode);
         alarmReqDTO.setAlarmDate(LocalDateTime.now());
         alarmReqDTO.setOrgUserId(orgUserId);
+        alarmReqDTO.setApproverId(approverId);
         alarmReqDTO.setGradeName(positionAndGradeDTO.getGradeName());
         alarmReqDTO.setPositionName(positionAndGradeDTO.getPositionName());
         alarmReqDTO.setApprovalDocId(approvalDocId);
